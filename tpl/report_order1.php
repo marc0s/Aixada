@@ -94,11 +94,11 @@
 						<img alt="coop logo" src="../img/tpl_header_logo.png" width="500" height="180"/>
 		</div>
 		<div id="address">
-			<h2 class="txtAlignRight">COOPERATIVA NAME</h2>
-			<h2 class="txtAlignRight">CIF/NIF: F6500000</h2>
-			<p class="txtAlignRight">Street<br/>
-			Zip City<br/>
-			email@bla.com
+			<h2 class="txtAlignRight">Associació de Consumidors Socarrel</h2>
+			<h2 class="txtAlignRight">NIF: G55147094</h2>
+			<p class="txtAlignRight">Barri Cambrerol, 11<br/>
+			17452 Massanes<br/>
+			info@socarrel.org
 			</p>
 		</div>
 	</div>
