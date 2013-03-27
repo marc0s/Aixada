@@ -3,6 +3,7 @@
 insert into aixada_product_category values 
         (1, 'SET_ME'),
 		(1000, 'prdcat_vegies'),
+		(1500, 'prdcat_legumes'),
 		(2000, 'prdcat_fruit'),
 		(3000, 'prdcat_mushrooms'),
 		(4000, 'prdcat_dairy'), 			

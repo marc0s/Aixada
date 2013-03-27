@@ -442,6 +442,7 @@ $Text['msg_delete_incident'] = "¿Seguro que quieres eliminar este incidente?";
 $Text['SET_ME'] 			= 'SET_ME';
 
 $Text['prdcat_vegies']		 	= "Verduras";
+$Text['prdcat_legumes']		 	= "Legumbres";
 $Text['prdcat_fruit'] 			= "Fruta";
 $Text['prdcat_mushrooms'] 		= "Setas";
 $Text['prdcat_dairy'] 			= "Leche y yogures"; 			//leche fresca, yougur

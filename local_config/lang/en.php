@@ -430,6 +430,7 @@ $Text['msg_delete_incident'] = "Are you sure you want to delete this incident?";
 $Text['SET_ME'] 			= 'SET_ME';
 
 $Text['prdcat_vegies']		 	= "Vegetables";
+$Text['prdcat_legumes']		 	= "Legumes";
 $Text['prdcat_fruit'] 			= "Fresh fruits";
 $Text['prdcat_mushrooms'] 		= "Mushrooms";
 $Text['prdcat_dairy'] 			= "Milk and yoghurt"; 			//fresh milk, joguhrt

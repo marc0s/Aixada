@@ -433,6 +433,7 @@ $Text['msg_delete_incident'] = "Segur que voleu eliminar aquest incident?";
 $Text['SET_ME'] 			= 'SET_ME';
 
 $Text['prdcat_vegies']		 	= "Verdures";
+$Text['prdcat_legumes']		 	= "Llegums";
 $Text['prdcat_fruit'] 			= "Fruita";
 $Text['prdcat_mushrooms'] 		= "Bolets";
 $Text['prdcat_dairy'] 			= "Llet i iogurts"; 			//llet fresca, iogurt
