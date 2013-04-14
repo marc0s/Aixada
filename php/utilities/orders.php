@@ -18,7 +18,7 @@ require_once(__ROOT__ . 'local_config/lang/'.get_session_language() . '.php');
  */
 function edit_total_order_quantities($order_id, $product_id, $new_total_quantity){
 	
-	$rs = do_stored_query('get_order_item_detail', $order_id, 0,0, 0,$product_id );
+	$rs = do_stored_query('get_order_item_detail', $order_id, 0,0, 0,$product_id);
 	
 	$uf_qu = array();
 	
@@ -44,6 +44,26 @@ function edit_total_order_quantities($order_id, $product_id, $new_total_quantity
 }
 
 
+/**
+ * changes price for a product
+ * @param unknown_type $order_id
+ * @param unknown_type $product_id
+ * @param unknown_type $new_price
+ */
+function edit_order_product_price($order_id, $product_id, $new_price) {
+    $rs = do_stored_query('get_order_item_detail', $order_id, 0, 0, 0, $product_id);
+    $uf_ids = array();
+    
+	DBWrap::get_instance()->free_next_results();
+    $xml = '<total>1</total>';
+    $xml .= '<rows>';
+    while ($row = $rs->fetch_assoc()) {
+        do_stored_query('modify_order_item_price', $order_id, $product_id, $row['uf_id'], $new_price);
+        $xml .= "<row><uf_id>${uf_id}</uf_id><price>${new_price}</price></row>";
+    }
+	DBWrap::get_instance()->free_next_results();
+	printXML($xml . '</rows>');
+}
 
 /**
  * 
@@ -252,4 +272,5 @@ function get_orders_in_range($time_period='ordersForToday', $uf_id=0, $from_date
 
 	
 }
+
 ?>

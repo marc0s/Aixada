@@ -39,17 +39,20 @@ try{
     		printXML(stored_query_XML_fields('get_order_item_detail', get_param('order_id',0), get_param('uf_id',0), get_param('provider_id',0), get_param('date_for_order',0),0 ));
     		exit;
     		
-    	//edits, modifies individual product quanties for order
+    	//edits, modifies individual product quantities for order
     	case 'editQuantity':
     		$splitParams = explode("_", get_param('product_uf'));
     		$ok = do_stored_query('modify_order_item_detail', get_param('order_id'), $splitParams[0], $splitParams[1] , get_param('quantity'));
     		if ($ok){
 	    		echo get_param('quantity');
     		} else {
-    			throw new Exception("An error occured during saving the new product quantity!!");      			
+    			throw new Exception("An error occured during saving the new product quantity!!");
     		}
     		exit;	
 
+        case 'editPrice':
+            echo edit_order_product_price(get_param('order_id'), get_param('product_id'), get_param('price'));
+            exit;
     	case 'editTotalQuantity':
     		//$splitParams = explode("_", get_param('product_id'));
     		echo edit_total_order_quantities(get_param('order_id'), get_param('product_id'), get_param('quantity')); //this is the product_id
@@ -113,6 +116,11 @@ try{
   			$zipfile = $rm->bundle_orders(get_param('provider_id'), get_param('date_for_order'), get_param('order_id'),0);
       		echo $zipfile;
       		exit;
+
+        case 'editProductPrice':
+            edit_product_price_in_order(get_param('order_id'), get_param('product_id'),
+                get_param('price'));
+            exit;
       		
     default:  
     	 throw new Exception("ctrlOrders: oper={$_REQUEST['oper']} not supported");  

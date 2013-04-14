@@ -126,6 +126,7 @@
 						});
 
 						theadStr += '<th><?=$Text['total'];?></th>';
+                        theadStr += '<th><?=$Text['new_unit_price'];?></th>';
 						theadStr += '<th class="revisedCol"><?=$Text['ostat_revised'];?></th>';
 						
 						$('#tbl_reviseOrder thead tr').last().append(theadStr);
@@ -158,6 +159,10 @@
 
 					//product total quantities
 					tbodyStr += '<td class="nobr totalQu total_'+product_id+'"></td>';
+
+                    //product new unit price
+                    // tbodyStr += '<td class="nobr newPrice newPrice_'+product_id+'"></td>';
+                    tbodyStr += '<td class="nobr newPrice newPrice_'+product_id+'" row="'+product_id+'"></td>';
 					
 					//revised checkbox for product
 					tbodyStr += '<td class="textAlignCenter revisedCol"><input type="checkbox" isRevisedId="'+product_id+'" id="ckboxRevised_'+product_id+'" name="revised" /></td>';
@@ -178,6 +183,7 @@
 						var quShop = 0; 
 						var lastId = -1; 
 						var quShopHTML = '';  
+                        var shopPrice = 0;
 						
 						$(xml).find('row').each(function(){
 						
@@ -195,6 +201,7 @@
 							var tblCol = '.Col-'+uf_id;
 							var tblRow = '.Row-'+product_id;
 							var pid	= product_id + '_' + uf_id; 
+                            shopPrice = $(this).find('unit_price_stamp').text();
 							
 							$(tblCol+tblRow).append('<p id="'+pid+'" class="textAlignCenter">'+qu+''+quShopHTML+'</p>')
 							
@@ -221,6 +228,8 @@
 								quTotal = 0; 
 								quShopTotal = 0; 
 							}
+                            var newprice = "<span>"+shopPrice+"</span>";
+                            $('.newPrice_'+product_id).html(newprice);
 							
 							quTotal += new Number(qu); 
 							quShopTotal += new Number(quShop);
@@ -421,6 +430,38 @@
 				}
 			});
 
+            $('td.newPrice')
+                .live('mouseover', function(e){
+                    if(!$(this).hasClass('editable') && gSection == 'review'){
+						var pid = $(this).attr('row');
+                        $(this).children(':first')
+                            .addClass('editable')
+                            .editable('php/ctrl/Orders.php', {
+                                submitdata: {
+                                    oper: 'editPrice',
+                                    order_id: gSelRow.attr('orderId'),
+                                    product_id: pid },
+                                name: 'price',
+                                indicator: 'Saving',
+                                tooltip: 'Click to adjust to the real price',
+                                callback: function(xml, settings){
+                                    var pid = settings.submitdata.product_id;
+                                    var newprice = 0;
+                                    $(xml).find('row').each(function(){
+                                        var newprice = $(this).find('price').text();
+                                        var selector = '.newPrice_' + pid;
+                                        $(selector)
+                                            .removeClass('toRevise')
+                                            .addClass('revised')
+                                            .children(':first')
+                                            .text(newprice);
+                                    });
+                                    $('#ckboxRevised_'+pid).attr('checked', 'checked');
+                                }
+                    });
+
+                }
+            });
 
 			//adjust total quantities
 			$('td.totalQu')
@@ -434,7 +475,9 @@
 									submitdata : {
 										oper: 'editTotalQuantity',
 										order_id : gSelRow.attr('orderId'),
-										product_id : pid 
+                                        product_id : pid,
+                                        price: $('.newPrice_'+pid).children(':first').text(),
+                                        product_uf: '116_1'
 										},
 									name 	: 'quantity',
 									indicator: 'Saving',

@@ -279,7 +279,7 @@ end|*/
  * copied to aixada_shop_item
  */
 drop procedure if exists modify_order_item_detail|
-create procedure modify_order_item_detail (in the_order_id int, in the_product_id int, in the_uf_id int,  in the_quantity float(10,4))
+create procedure modify_order_item_detail (in the_order_id int, in the_product_id int, in the_uf_id int,  in the_quantity float(10,4), in the_price float(10, 2))
 begin
 	
 	declare edited boolean default is_under_revision(the_order_id);
@@ -308,6 +308,50 @@ begin
 			aixada_order_to_shop os
 		set
 			os.quantity = the_quantity,
+            os.unit_price_stamp = the_price,
+			os.revised = 1
+		where
+			os.product_id = the_product_id
+			and os.order_id = the_order_id
+			and os.uf_id = the_uf_id; 
+	end if; 
+end |
+
+/**
+ * modifies an order item price. This is needed for revising orders and adjusting the prices 
+ * for each item and uf. operates with a sort of temporary table aixada_order_to_shop where
+ * the whole revision process is stored. This table (and not aixada_order_item) will then be 
+ * copied to aixada_shop_item
+ */
+drop procedure if exists modify_order_item_price|
+create procedure modify_order_item_price (in the_order_id int, in the_product_id int, in the_uf_id int, in the_price float(10, 2))
+begin
+	declare edited boolean default is_under_revision(the_order_id);
+	
+	-- if not under revision, then copy the order from aixada_order_item --
+	if (edited is not true) then
+		insert into
+			aixada_order_to_shop (order_item_id, uf_id, order_id, unit_price_stamp, product_id, quantity)
+		select
+			oi.id, 
+			oi.uf_id,
+			oi.order_id,
+			oi.unit_price_stamp,
+			oi.product_id,
+			oi.quantity
+		from
+			aixada_order_item oi
+		where
+			oi.order_id = the_order_id; 
+	end if; 
+		
+	
+	if (the_uf_id > 0) then
+		-- update price if uf_id is set--
+		update
+			aixada_order_to_shop os
+		set
+            os.unit_price_stamp = the_price,
 			os.revised = 1
 		where
 			os.product_id = the_product_id
