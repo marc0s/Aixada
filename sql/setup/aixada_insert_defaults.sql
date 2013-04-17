@@ -8,7 +8,7 @@ insert into aixada_product_category values
 		(2000, 'prdcat_fruit'),
 		(3000, 'prdcat_mushrooms'),
 		(4000, 'prdcat_dairy'), 			
-		(5000, 'prdcat_meat'),	
+		(5000, 'prdcat_meat_eggs'),	
 		(6000, 'prdcat_bakery'),
 		(7000, 'prdcat_cheese'),
 		(8000, 'prdcat_sausages'),					
