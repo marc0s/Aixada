@@ -69,8 +69,8 @@
 								['aixada_orderable_type', 'sOrderableTypeId', 'id', 'description'],
 								['aixada_uf', 'sResponsibleUfId','id','name'],
 								['aixada_product_category','sCategoryId', 'id', 'description'],
-								['aixada_rev_tax_type','sRevTaxTypeId', 'id', 'name'],
-								['aixada_iva_type','sIvaPercentId','id','name'],
+								['aixada_rev_tax_type','sRevTaxTypeId', 'id', 'name', 'rev_tax_percent'],
+								['aixada_iva_type','sIvaPercentId','id','name', 'percent'],
 								['aixada_unit_measure','sUnitMeasureOrderId','id','name'],
 								['aixada_unit_measure','sUnitMeasureShopId','id','name']
 						];
@@ -398,7 +398,7 @@
 			}
 
 			//reset all textfields
-			$('input:text, input:hidden, textarea', frm).val('');
+			$('input:text, textarea', frm).val('');
 
 			//assume that a new provider is active
 			$('input:checkbox', frm).each(function(){
@@ -1120,9 +1120,12 @@
 			var price = $.checkNumber($('input[name="unit_price"]', frm),0.00, 2);
 			$('input[name=unit_price]', frm).val(price);
 			
+			var revp = $('span.sIvaPercentId', frm).children('select').children('option:selected').attr('addInfo');
+			var ivap = $('span.sRevTaxTypeId', frm).children('select').children('option:selected').attr('addInfo');
 			
-			var rev = new Number($('input[name=rev_tax_type_id]', frm).val());
-			var iva = new Number($('input[name=iva_percent_id]', frm).val());
+			var rev = new Number(revp);
+			var iva = new Number(ivap);
+			
 			var price = price * (1 + iva/100) * (1 + rev/100); 
 
 			$('.unit_price_brutto', frm).text(price.toFixed(2));
