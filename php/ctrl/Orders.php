@@ -42,7 +42,7 @@ try{
     	//edits, modifies individual product quantities for order
     	case 'editQuantity':
     		$splitParams = explode("_", get_param('product_uf'));
-    		$ok = do_stored_query('modify_order_item_detail', get_param('order_id'), $splitParams[0], $splitParams[1] , get_param('quantity'));
+    		$ok = do_stored_query('modify_order_item_detail', get_param('order_id'), $splitParams[0], $splitParams[1] , get_param('quantity'), -1);
     		if ($ok){
 	    		echo get_param('quantity');
     		} else {

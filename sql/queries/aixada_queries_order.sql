@@ -302,7 +302,7 @@ begin
 	end if; 
 		
 	
-	if (the_uf_id > 0) then
+	if (the_uf_id > 0 and the_price < 0) then
 		-- update quantity if uf_id is set--
 		update
 			aixada_order_to_shop os
@@ -315,6 +315,20 @@ begin
 			and os.order_id = the_order_id
 			and os.uf_id = the_uf_id; 
 	end if; 
+
+    if (the_uf_id > 0 and the_price >= 0) then
+		-- update price if uf_id is set--
+		update
+			aixada_order_to_shop os
+		set
+            os.unit_price_stamp = the_price,
+			os.revised = 1
+		where
+			os.product_id = the_product_id
+			and os.order_id = the_order_id
+			and os.uf_id = the_uf_id; 
+	end if; 
+
 end |
 
 /**
