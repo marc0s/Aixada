@@ -237,7 +237,16 @@
 
 						});
 
-						
+                        $('th.hidden').removeClass('hidden').show();
+
+                        $('.hidden.interactiveCell').each(function() {
+                            var row = $(this).attr('row');
+                            var col = $(this).attr('col');
+                            var pid = row + '_' + col ;
+                            $(this).append('<p id="'+pid+'" class="textAlignCenter editable">0</p>');
+                            $(this).removeClass('hidden').show();
+                        });
+
 						var total = "<span>"+quTotal.toFixed(2)+"</span><span class='shopQuantity'>("+quShopTotal+")</span>";
 						$('.total_'+lastId).html(total);
 
