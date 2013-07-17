@@ -29,6 +29,7 @@
 
 	//list of order to be bulk-printed
 	var gPrintList = [];
+
 	
 	$(function(){
 
@@ -463,6 +464,25 @@
                 }
             });
 
+			
+			//export order options dialog
+			$('#dialog_export_options').dialog({
+				autoOpen:false,
+				width:580,
+				height:550,
+				buttons: {  
+					"<?=$Text['btn_ok'];?>" : function(){
+							exportOrder();
+						},
+				
+					"<?=$Text['btn_close'];?>"	: function(){
+						$( this ).dialog( "close" );
+						} 
+				}
+			});
+			
+
+
 			//adjust total quantities
 			$('td.totalQu')
 				.live('mouseover', function(e){
@@ -724,6 +744,34 @@
 					}
 				});
 
+			}
+
+
+			/**
+			 *	read export options and make the export call for the order. 
+			 */
+			function exportOrder(){
+				var frmData = checkExportForm();
+				if (frmData){					
+					var urlStr = "php/ctrl/ImportExport.php?oper=exportOrder&order_id="+gSelRow.attr('orderId')+"&provider_id="+gSelRow.attr("providerId")+"&date_for_order="+gSelRow.attr("dateForOrder")+"&" + frmData; 
+					//load the stuff through the export channel
+					$('#exportChannel').attr('src',urlStr);
+					setTimeout(function(){
+						$('#dialog_export_options').dialog("close");
+					}, 2000);
+				}	
+			}
+
+
+			function checkExportForm(){
+				var frmData = $('#frm_export_options').serialize();
+				if (!$.checkFormLength($('input[name=exportName]'),1,150)){
+					$.showMsg({
+						msg:"File name cannot be empty!",
+						type: 'error'});
+					return false;
+				}
+				return frmData; 
 			}
 
 
@@ -999,6 +1047,21 @@
 							getZippedOrders();
 	        			}
 	        		});
+
+
+				// export single order
+				$('#btn_order_export')
+					.button({
+						icons: {
+							primary: "ui-icon-transferthick-e-w"
+			        	}
+					})
+					.click(function(e){
+						$('#dialog_export_options')
+							.data("export", "order")
+							.dialog("open");
+					 }); 
+        		
 
 				//view selected order (no editing)
 				/*$('.viewOrderBtn')
@@ -1372,6 +1435,7 @@
 		   		
 		   		<button id="btn_setShopDate" class="reviewElements btn_right" title="<?=$Text['distribute_desc'];?>"><?=$Text['btn_distribute'];?></button>
 				<button	id="tblViewOptions" class="overviewElements btn_right"><?=$Text['filter_orders']; ?></button>
+				<button id="btn_order_export" class="floatRight viewElements" ><?php echo $Text['btn_export']; ?></button>
 				
 				<div id="tblOptionsItems" class="hidden">
 					<ul>
@@ -1426,7 +1490,7 @@
 						<td>{time_left}</td>
 						<td>{ts_sent_off}</td>
 						<td>{date_for_shop}</td>
-						<td><p  class="textAlignRight">{order_total} €&nbsp;&nbsp;</p></td>
+						<td><p  class="textAlignRight">{order_total}<?php echo $Text['currency_sign']; ?>&nbsp;&nbsp;</p></td>
 						<td>{revision_status}</td>
 						<td class="aix-layout-fixW100s">				
 							<a href="javascript:void(null)" class="reviseOrderBtn nobr"><?php echo $Text['btn_revise']; ?></a>
@@ -1514,7 +1578,7 @@
 							<p><?php echo $Text['total_orginal_order']; ?></p>
 						</td>
 						<td>
-							<p class="textAlignRight  boldStuff">{total} €</p>
+							<p class="textAlignRight  boldStuff">{total} <?php echo $Text['currency_sign'];?></p>
 						</td>
 					</tr>
 					<tr>
@@ -1534,7 +1598,7 @@
 							<p><?php echo $Text['total_after_revision']; ?></p>
 						</td>
 						<td>
-							<p class="textAlignRight  boldStuff">{delivered_total} €</p>
+							<p class="textAlignRight  boldStuff">{delivered_total} <?php echo $Text['currency_sign'];?></p>
 						</td>
 					</tr>
 					<tr>
@@ -1554,7 +1618,7 @@
 							<p><?php echo $Text['validated'];?></p>
 						</td>
 						<td>
-							<p class="textAlignRight boldStuff">{validated_income} €</p>
+							<p class="textAlignRight boldStuff">{validated_income} <?php echo $Text['currency_sign'];?></p>
 						</td>
 					</tr>
 					<tr>
@@ -1677,6 +1741,13 @@
 </div>
 <iframe name="dataFrame" style="display:none;"></iframe>
 <form id="submitZipForm" class="hidden"></form>
+
+
+<iframe id="exportChannel" src="" style="display:none; visibility:hidden;" name="exportChannel"></iframe>
+<div id="dialog_export_options" title="<?php echo $Text['export_options']; ?>">
+<?php include("tpl/export_dialog.php");?>
+</div>
+
 
 <!-- / END -->
 </body>
