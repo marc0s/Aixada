@@ -485,8 +485,7 @@
 										oper: 'editTotalQuantity',
 										order_id : gSelRow.attr('orderId'),
                                         product_id : pid,
-                                        price: $('.newPrice_'+pid).children(':first').text(),
-                                        product_uf: '116_1'
+                                        price: $('.newPrice_'+pid).children(':first').text()
 										},
 									name 	: 'quantity',
 									indicator: 'Saving',
