@@ -306,7 +306,6 @@ begin
 			aixada_order_to_shop os
 		set
 			os.quantity = the_quantity,
-            os.unit_price_stamp = the_price,
 			os.revised = 1
 		where
 			os.product_id = the_product_id
